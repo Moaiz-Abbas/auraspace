@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AURA SPACES | Design That Breathes Emotion</title>
+
+  <!-- FONT LINKS -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <!-- STYLES -->
+  <style>
+    :root {
+      --beige: #F5EFE6;
+      --black: #1A1A1A;
+      --gold: #D4AF37;
+      --ease: cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+
+    /* Reset & Base */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--beige);
+      color: var(--black);
+      overflow-x: hidden;
+      line-height: 1.6;
+      cursor: none; /* Hide default cursor */
+    }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; height: auto; display: block; }
+
+    /* Custom Cursor */
+    .cursor {
+      position: fixed;
+      top:0; left:0;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius:50%;
+      pointer-events:none;
+      transform: translate(-50%,-50%);
+      transition: transform .1s var(--ease), background .3s;
+      z-index: 9999;
+    }
+    .hover-target:hover ~ .cursor { transform: scale(2); background: rgba(212,175,55,0.8); }
+
+    /* STICKY HEADER */
+    header {
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      background: rgba(245, 239, 230, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.3s ease;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+    }
+    header.scrolled { background: rgba(245, 239, 230, 0.98); box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--gold);
+      font-weight: 700;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    nav a {
+      font-weight: 500;
+      color: var(--black);
+      transition: color 0.3s;
+      position: relative;
+    }
+    nav a:hover { color: var(--gold); }
+    nav a::after {
+      content: ''; position: absolute; bottom: -5px; left: 0;
+      width: 0; height: 2px; background: var(--gold);
+      transition: width 0.3s;
+    }
+    nav a:hover::after { width: 100%; }
+    /* Mobile Menu (Hidden for now; add JS toggle if needed) */
+    @media (max-width: 768px) {
+      nav ul { display: none; } /* Add hamburger later */
+      header { padding: 1rem; }
+    }
+
+    /* HERO */
+    #hero {
+      position: relative;
+      width: 100vw; height: 100vh;
+      overflow: hidden;
+      margin-top: 80px; /* Account for sticky header */
+    }
+    #hero video, #hero .hero-bg {
+      position: absolute;
+      top:50%; left:50%;
+      min-width: 100%; min-height:100%;
+      transform: translate(-50%,-50%);
+      object-fit: cover;
+    }
+    #hero .hero-bg { /* Fallback image if video fails */
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover;
+    }
+    #hero video { z-index: 1; }
+    #hero::before {
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(rgba(26,26,26,0.4), rgba(26,26,26,0.2));
+      z-index:2;
+    }
+    .hero-content {
+      position: relative;
+      z-index:3;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:0 1.5rem;
+      color: var(--beige);
+    }
+    .hero-content h1 {
+      font-family:'Playfair Display', serif;
+      font-size: 4rem;
+      margin-bottom:1rem;
+      line-height:1.1;
+      opacity:0; animation:fadeInUp 1s ease forwards 0.5s;
+    }
+    .hero-content p {
+      font-size:1.25rem;
+      margin-bottom:2.5rem;
+      max-width: 600px;
+      opacity:0; animation:fadeInUp 1s ease forwards 0.8s;
+    }
+    .cta-btn {
+      display:inline-block;
+      padding:1rem 2.5rem;
+      color: var(--beige);
+      border:2px solid var(--beige);
+      font-weight:500;
+      border-radius:50px;
+      transition: all .3s var(--ease);
+      position: relative;
+      z-index:4;
+      font-size: 1rem;
+    }
+    .cta-btn:hover {
+      background: var(--gold);
+      border-color: var(--gold);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(212,175,55,0.3);
+    }
+
+    /* Floating Gold Dust */
+    #particles {
+      position:absolute; inset:0;
+      z-index:2;
+      pointer-events:none;
+    }
+
+    /* SECTION COMMON */
+    section {
+      padding:8rem 2rem;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    h2 {
+      font-family:'Playfair Display', serif;
+      font-size:3rem;
+      text-align:center;
+      margin-bottom:2.5rem;
+      color:var(--black);
+      position: relative;
+    }
+    .divider {
+      width:80px; height:3px;
+      background: var(--gold);
+      margin:1.5rem auto 3rem;
+    }
+    .fade-in { opacity:0; transform: translateY(50px); transition: all 0.8s var(--ease); }
+    .fade-in.visible { opacity:1; transform: translateY(0); }
+
+    /* ABOUT */
+    #about {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:4rem;
+      align-items:center;
+      background: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') right/cover;
+      background-size: cover;
+      padding: 8rem 2rem;
+      border-radius: 20px;
+      margin: 2rem auto;
+      position: relative;
+    }
+    #about::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(245,239,230,0.85);
+      border-radius: 20px;
+    }
+    #about > * { position: relative; z-index: 1; }
+    #about img {
+      width:100%; border-radius:12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    #about .text {
+      padding-right: 2rem;
+    }
+    #about p {
+      font-size: 1.125rem;
+      margin-bottom: 2rem;
+    }
+    #about blockquote {
+      font-family:'Playfair Display', serif;
+      font-size:1.5rem;
+      margin-top:2rem;
+      color:var(--black);
+      font-style: italic;
+      border-left: 4px solid var(--gold);
+      padding-left: 1.5rem;
+    }
+
+    /* SERVICES (NEW SECTION) */
+    #services {
+      background: linear-gradient(to bottom, var(--beige), #f0e9de);
+    }
+    #services .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 3rem;
+      margin-top: 3rem;
+    }
+    .service-card {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+      transition: transform 0.3s;
+    }
+    .service-card:hover {
+      transform: translateY(-10px);
+    }
+    .service-card img {
+      width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;
+    }
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; margin-bottom: 1rem;
+    }
+
+    /* TEAM (NEW SECTION) */
+    #team {
+      background: url('https://images.unsplash.com/photo-1524758631624-e2822e304766?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover fixed;
+      color: var(--beige);
+      text-align: center;
+    }
+    #team::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(26,26,26,0.6);
+    }
+    #team > * { position: relative; z-index: 1; }
+    #team .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .team-member {
+      background: rgba(255,255,255,0.1);
+      padding: 2rem;
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+    }
+    .team-member img {
+      width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1rem;
+      object-fit: cover;
+    }
+    .team-member h3 { font-family: 'Playfair Display', serif; font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .team-member p { font-size: 0.9rem; opacity: 0.9; }
+
+    /* OUR WORK */
+    #work .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+      gap:2rem;
+      margin-top:3rem;
+    }
+    .card {
+      position:relative;
+      overflow:hidden;
+      border-radius:12px;
+      cursor: pointer;
+      transform-style:preserve-3d;
+      perspective:1000px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      transition: transform 0.6s var(--ease);
+    }
+    .card:hover {
+      transform: rotateY(5deg) translateY(-5px);
+    }
+    .card img {
+      width:100%; height:300px;
+      object-fit:cover;
+      display:block;
+      transition: transform .6s var(--ease);
+    }
+    .card:hover img { transform: scale(1.05); }
+
+    /* LATEST PROJECTS (NEW SECTION) */
+    #projects {
+      background: var(--beige);
+    }
+    #projects .featured {
+      position: relative;
+      height: 500px;
+      overflow: hidden;
+      border-radius: 20px;
+      margin: 3rem 0;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+    }
+    #projects .featured img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    #projects .featured::after {
+      content: 'Featured: Serenity Penthouse'; position: absolute; bottom: 2rem; left: 2rem;
+      background: rgba(26,26,26,0.7); color: var(--beige); padding: 1rem 2rem;
+      font-family: 'Playfair Display', serif; font-size: 1.5rem; border-radius: 8px;
+    }
+    #projects p {
+      text-align: center; font-size: 1.125rem; max-width: 800px; margin: 2rem auto;
+    }
+
+    /* DESIGN PHILOSOPHY */
+    #philosophy {
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover fixed;
+      color: var(--white);
+      text-align: center;
+      position: relative;
+    }
+    #philosophy::before {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(26,26,26,0.4);
+    }
+    #philosophy .content {
+      background: rgba(245,239,230,0.9);
+      padding:5rem 3rem;
+      border-left:6px solid var(--gold);
+      margin:0 auto;
+      max-width:900px;
+      text-align:left;
+      font-size:1.125rem;
+      line-height:1.7;
+      border-radius: 12px;
+    }
+    #philosophy blockquote {
+      font-size: 1.75rem; margin-top: 2rem; font-style: italic;
+    }
+
+    /* SUSTAINABILITY (NEW SECTION) */
+    #sustainability {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    #sustainability img {
+      width: 100%; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    #sustainability .text {
+      font-size: 1.125rem;
+    }
+    #sustainability h3 {
+      font-family: 'Playfair Display', serif; font-size: 1.75rem; margin-bottom: 1rem; color: var(--gold);
+    }
+
+    /* TESTIMONIALS (EXPANDED) */
+    #testimonials {
+      background: linear-gradient(to bottom, #f0e9de, var(--beige));
+    }
+    #testimonials .slides {
+      max-width: 1000px; margin: 0 auto;
+    }
+    #testimonials .slide {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:3rem;
+      align-items:center;
+      margin-bottom:4rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+    }
+    #testimonials .slide img {
+      width:100%; border-radius:12px;
+    }
+    #testimonials blockquote {
+      font-family:'Playfair Display', serif;
+      font-size:1.5rem;
+      color: var(--black);
+      position: relative;
+    }
+    #testimonials blockquote::before {
+      content: '"'; font-size: 4rem; color: var(--gold); position: absolute; left: -1rem; top: -0.5rem;
+    }
+
+    /* PROCESS OVERVIEW (EXPANDED) */
+    #process .timeline {
+      display:flex;
+      justify-content: space-between;
+      position: relative;
+      padding:3rem 0;
+      list-style:none;
+      max-width: 1000px; margin: 0 auto;
+    }
+    #process .timeline::before {
+      
+      width:90%; height:3px; background: var(--gold);
+    }
+    #process .step {
+      text-align:center;
+      flex:1;
+      position:relative;
+      padding: 1rem;
+    }
+    #process .step .circle {
+      width:30px; height:30px;
+      border-radius:50%;
+      background: var(--gold);
+      margin:0 auto 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--black); font-weight: bold; font-size: 0.9rem;
+    }
+    #process .step p {
+      font-size: 0.95rem; margin-top: 0.5rem;
+    }
+
+  /* FAQ (FIXED SECTION) */
+#faq {
+  background: var(--black);
+  color: var(--beige);
+  text-align: center;
+  padding: 6rem 2rem;
+}
+#faq .accordion {
+  max-width: 800px; 
+  margin: 3rem auto 0;
+}
+.faq-item {
+  margin-bottom: 1.5rem; 
+  border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.faq-question {
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  padding: 1.5rem;
+  cursor: pointer; 
+  font-weight: 500;
+  transition: background 0.3s;
+}
+.faq-question:hover {
+  background: rgba(212, 175, 55, 0.1);
+}
+.faq-answer {
+  /* Fixed: Properly hide answers initially */
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  padding: 0 1.5rem;
+  /* Critical fix: Include padding in height calculation */
+  box-sizing: border-box;
+}
+.faq-item.active .faq-answer { 
+  max-height: 500px; /* Increased for longer answers */
+  padding: 0 1.5rem 1.5rem;
+}
+
+    /* CONTACT (FIXED & RESPONSIVE) */
+#contact {
+  position: relative;
+  padding: 8rem 2rem 6rem;
+  background: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80') center/cover fixed;
+  z-index: 1;
+}
+
+#contact::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(245, 239, 230, 0.92);
+  z-index: -1;
+}
+
+#contact > * {
+  position: relative;
+  z-index: 1;
+}
+
+.contact-wrapper {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-direction: row;
+}
+
+#contact .form-container {
+  /* Removed absolute positioning */
+  background: white;
+  padding: 3rem;
+  border: 2px solid var(--gold);
+  border-radius: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 300px;
+}
+
+#contact form {
+  display: flex;
+  flex-direction: column;
+}
+
+#contact input,
+#contact textarea {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: 'Poppins', sans-serif;
+  transition: border 0.3s;
+}
+
+#contact input:focus,
+#contact textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+#contact button {
+  padding: 1rem;
+  background: var(--gold);
+  color: var(--black);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s var(--ease);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#contact button:hover {
+  background: var(--black);
+  color: var(--beige);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+#contact .map-container {
+  flex: 1;
+  min-width: 300px;
+  height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+#contact .map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Responsive: Stack on small screens */
+@media (max-width: 768px) {
+  .contact-wrapper {
+    flex-direction: column;
+  }
+
+  #contact .form-container {
+    width: 100%;
+  }
+
+  #contact {
+    padding: 6rem 1rem 4rem;
+  }
+}
+
+    /* FOOTER (EXPANDED) */
+    footer {
+      padding:3rem 2rem 2rem;
+      text-align:center;
+      background: var(--black);
+      color: var(--beige);
+      position: relative;
+      overflow:hidden;
+    }
+    footer::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(45deg, transparent 30%, rgba(212,175,55,0.05) 50%, transparent 70%);
+      animation: shimmer 3s infinite linear;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    footer > * { position: relative; z-index: 1; }
+    .monogram {
+      font-family:'Playfair Display', serif;
+      font-size:2.5rem;
+      margin-bottom:1.5rem;
+      color: var(--gold);
+    }
+    .social-links { margin: 2rem 0; }
+    .social-links a { margin:0 1rem; color: var(--beige); font-size:1.5rem; transition: color 0.3s; }
+    .social-links a:hover { color: var(--gold); }
+    footer p { opacity: 0.8; margin-top: 1rem; }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(50px); }
+      to   { opacity:1; transform: translateY(0);      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #about, #sustainability, #testimonials .slide { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-content h1 { font-size: 2.5rem; }
+      section { padding: 4rem 1rem; }
+      #contact .form-container { position: static; width: 100%; margin-top: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom Cursor -->
+  <div class="cursor"></div>
+
+  <!-- STICKY HEADER -->
+  <header id="header">
+    <div class="logo">AS</div>
+    <nav>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#testimonials">Testimonials</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero">
+    <video src="https://assets.mixkit.co/videos/preview/mixkit-portrait-of-a-woman-in-a-luxury-home-3988-large.mp4" autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"></video>
+    <div class="hero-bg"></div> <!-- Fallback -->
+    <canvas id="particles"></canvas>
+    <div class="hero-content">
+      <h1>Design That Breathes Emotion.</h1>
+      <p>We craft bespoke interiors that speak the language of light, texture, and calm. For discerning homeowners and developers seeking spaces that resonate on a deeper level.</p>
+      <a href="#contact" class="cta-btn hover-target">Book a Private Design Consultation</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="fade-in">
+    <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Portrait of lead designer in elegant studio setting" loading="lazy"/>
+    <div class="text">
+      <h2>About AURA SPACES</h2>
+      <p>Founded in 2018, AURA SPACES is a premier interior design studio dedicated to minimalist luxury. We blend emotional storytelling with impeccable craftsmanship, creating environments that elevate everyday living for high-income homeowners and real estate visionaries.</p>
+      <p>Our approach is rooted in simplicity using light, natural materials, and subtle textures to foster serenity and sophistication. From urban penthouses to serene retreats, every project is a narrative waiting to unfold.</p>
+      <blockquote>“Every space tells a story we just help you find its voice.”<br> Elena Voss, Founding Designer</blockquote>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" class="fade-in">
+    <h2>Our Services</h2>
+    <div class="divider"></div>
+    <p style="text-align: center; font-size: 1.125rem; max-width: 800px; margin: 0 auto 3rem;">We offer tailored solutions for residential and commercial spaces, ensuring every detail aligns with your vision.</p>
+    <div class="grid">
+      <div class="service-card fade-in">
+        <img src="https://images.unsplash.com/photo-1600210492493-0946911123ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Luxury residential bedroom design" loading="lazy"/>
+        <h3>Residential Design</h3>
+        <p>Bespoke homes that harmonize with your lifestyle, from concept to completion.</p>
+      </div>
+      <div class="service-card fade-in">
+        <img src="https://images.unsplash.com/photo-1758194190679-198a77cba84f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Modern commercial lobby interior" loading="lazy"/>
+        <h3>Commercial Spaces</h3>
+        <p>Elevated environments for offices, lobbies, and hospitality that inspire productivity and prestige.</p>
+      </div>
+      <div class="service-card fade-in">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Outdoor terrace with minimalist luxury" loading="lazy"/>
+        <h3>Outdoor & Terrace</h3>
+        <p>Seamless indoor-outdoor transitions with sustainable, elegant outdoor living spaces.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section id="team" class="fade-in">
+    <h2>Our Team</h2>
+    <div class="divider" style="background: var(--beige);"></div>
+    <p style="max-width: 800px; margin: 0 auto 3rem; opacity: 0.9;">Meet the artisans behind AURA SPACES, passionate experts in design, architecture, and storytelling.</p>
+    <div class="grid">
+      <div class="team-member fade-in">
+        <img src="https://images.unsplash.com/photo-1434389677669-e08b4cac3105?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Elena Voss, Lead Designer" loading="lazy"/>
+        <h3>Elena Voss</h3>
+        <p>Lead Designer & Founder<br>20+ years crafting emotional spaces.</p>
+      </div>
+      <div class="team-member fade-in">
+        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Marcus Hale, Architect" loading="lazy"/>
+        <h3>Marcus Hale</h3>
+        <p>Senior Architect<br>Specializing in sustainable luxury builds.</p>
+      </div>
+      <div class="team-member fade-in">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Lila Chen, Project Manager" loading="lazy"/>
+        <h3>Lila Chen</h3>
+        <p>Project Manager<br>Ensuring seamless execution from vision to reality.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR WORK -->
+  <section id="work" class="fade-in">
+    <h2>Our Work</h2>
+    <div class="divider"></div>
+    <p style="text-align: center; font-size: 1.125rem; max-width: 800px; margin: 0 auto 3rem;">A curated selection of our transformative projects, showcasing minimalist luxury in every detail.</p>
+    <div class="grid">
+      <div class="card hover-target fade-in"><img src="https://images.unsplash.com/photo-1750271334785-4f6008035021?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Minimalist bedroom with soft lighting" loading="lazy"/></div>
+      <div class="card hover-target fade-in"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Elegant living room with neutral tones" loading="lazy"/></div>
+      <div class="card hover-target fade-in"><img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Sleek modern kitchen" loading="lazy"/></div>
+      <div class="card hover-target fade-in"><img src="https://images.unsplash.com/photo-1609189123897-42db027571c9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bHV4dXJ5JTIwaG90ZWwlMjBsb2J5fGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=80" alt="Luxury hotel lobby" loading="lazy"/></div>
+      <div class="card hover-target fade-in"><img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Serene terrace overlooking city" loading="lazy"/></div>
+      <div class="card hover-target fade-in"><img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Contemporary office space" loading="lazy"/></div>
+    </div>
+  </section>
+
+  <!-- LATEST PROJECTS -->
+  <section id="projects" class="fade-in">
+    <h2>Latest Projects</h2>
+    <div class="divider"></div>
+    <div class="featured">
+      <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" alt="Featured Serenity Penthouse interior" loading="lazy"/>
+    </div>
+    <p>A recent collaboration with a high-profile developer, transforming a skyline penthouse into a sanctuary of calm and elegance. Featuring custom marble accents and diffused natural light.</p>
+  </section>
+
+  <!-- DESIGN PHILOSOPHY -->
+  <section id="philosophy" class="fade-in">
+    <div class="content">
+      <h2>Design Philosophy</h2>
+      <div class="divider"></div>
+      <p>At AURA SPACES, we believe design is an emotional journey. Minimalism isn't about subtraction it's about intention. We curate spaces where light dances with texture, where every element whispers rather than shouts.</p>
+      <p>Our philosophy draws from nature's quiet luxury: the subtle veins of marble, the warmth of aged wood, the calm of expansive views. We partner with artisans worldwide to ensure sustainability and timelessness in every project.</p>
+      <blockquote>"Spaces should feel like an extension of the soul serene, inviting, and profoundly personal."</blockquote>
+    </div>
+  </section>
+
+  <!-- SUSTAINABILITY -->
+  <section id="sustainability" class="fade-in">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Eco-friendly luxury interior with natural materials" loading="lazy"/>
+    <div class="text">
+      <h2>Sustainability at Heart</h2>
+      <h3>Ethical Luxury</h3>
+      <p>We prioritize eco-conscious materials like reclaimed wood, low-VOC finishes, and energy-efficient lighting. Our designs reduce environmental impact without compromising on opulence.</p>
+      <h3>Timeless Practices</h3>
+      <p>By focusing on durable, versatile elements, we create spaces that endure minimizing waste and maximizing longevity for generations of homeowners.</p>
+      <p>Certified partners in green building, we're committed to a future where luxury and responsibility coexist.</p>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="testimonials" class="fade-in">
+    <h2>What Our Clients Say</h2>
+    <div class="divider"></div>
+    <div class="slides">
+      <div class="slide fade-in">
+        <img src="https://images.unsplash.com/photo-1758448756350-3d0eec02ba37?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Luxury client home - penthouse" loading="lazy"/>
+        <blockquote>AURA SPACES transformed our penthouse into an oasis. It’s both warm and cutting-edge truly emotional.<br> J. Stephens, Homeowner</blockquote>
+      </div>
+      <div class="slide fade-in">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Elegant client residence" loading="lazy"/>
+        <blockquote>Their attention to light and texture is unparalleled. Every corner feels intentional and alive.<br> M. Valdez, Developer</blockquote>
+      </div>
+      <div class="slide fade-in">
+        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Modern client kitchen space" loading="lazy"/>
+        <blockquote>From moodboard to reveal, the process was seamless. Our home now breathes luxury.<br> S. Patel, Entrepreneur</blockquote>
+      </div>
+      <div class="slide fade-in">
+        <img src="https://images.unsplash.com/photo-1759038086454-5644437ccf4c?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Commercial client lobby" loading="lazy"/>
+        <blockquote>AURA elevated our office lobby to a statement of prestige. Highly recommend for developers.<br> R. Kim, Real Estate Executive</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS OVERVIEW -->
+  <section id="process" class="fade-in">
+    <h2>Our Process</h2>
+    <div class="divider"></div>
+    <p style="text-align: center; font-size: 1.125rem; max-width: 800px; margin: 0 auto 3rem;">A thoughtful, collaborative journey from initial spark to final reveal.</p>
+    <ul class="timeline">
+      <li class="step fade-in">
+        <div class="circle">1</div>
+        <strong>Consult</strong>
+        <p>Deep dive into your vision, lifestyle, and aspirations.</p>
+      </li>
+      <li class="step fade-in">
+        <div class="circle">2</div>
+        <strong>Moodboard</strong>
+        <p>Curate inspirations, materials, and palettes tailored to you.</p>
+      </li>
+      <li class="step fade-in">
+        <div class="circle">3</div>
+        <strong>Execution</strong>
+        <p>Seamless implementation with our network of artisans.</p>
+      </li>
+      <li class="step fade-in">
+        <div class="circle">4</div>
+        <strong>Reveal</strong>
+        <p>Unveil your space refined, emotional, and yours.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="fade-in">
+    <h2>Frequently Asked Questions</h2>
+    <div class="divider" style="background: var(--beige);"></div>
+    <div class="accordion">
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>How long does a typical project take?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Projects range from 3-12 months, depending on scope. We prioritize quality over speed.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>What is your minimum budget?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>We specialize in luxury designs starting at $150,000 for full residential transformations.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Do you work with real estate developers?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Yes, we collaborate on commercial and model home projects to enhance property value.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          <span>Are your designs sustainable?</span>
+          <span>+</span>
+        </div>
+        <div class="faq-answer">
+          <p>Absolutely we integrate eco-materials and energy-efficient features in every design.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="fade-in">
+    <div class="form-container hover-target">
+      <h3 style="font-family: 'Playfair Display', serif; margin-bottom: 1.5rem; color: var(--black);">Get in Touch</h3>
+      <form>
+        <input type="text" placeholder="Your Name" required aria-label="Name"/>
+        <input type="email" placeholder="Your Email" required aria-label="Email"/>
+        <input type="tel" placeholder="Your Phone" aria-label="Phone"/>
+        <textarea rows="5" placeholder="Tell us about your project and vision…" required aria-label="Message"></textarea>
+        <button type="submit">Schedule Consultation</button>
+      </form>
+    </div>
+    <div class="map-container">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.142347956068!2d-73.986004684593!3d40.748817979328!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sus!4v1690000000000" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="AURA SPACES Studio Location"></iframe>
+    </div>
+    <p style="text-align: center; margin-top: 2rem; font-size: 1rem;">Studio: 123 Rnd Avenue, New York, NY 10001 | +1 (555) 123-4567 | sample@auraspaces.com</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="monogram">AS</div>
+    <div class="social-links">
+      <a href="#" aria-label="Instagram" class="hover-target">📷</a>
+      <a href="#" aria-label="Pinterest" class="hover-target">📌</a>
+      <a href="#" aria-label="LinkedIn" class="hover-target">💼</a>
+      <a href="#" aria-label="Houzz" class="hover-target">🏠</a>
+    </div>
+    <p>© 2024 AURA SPACES. All rights reserved. | Privacy Policy | Terms of Service</p>
+    <p> Crafting timeless interiors for the discerning.</p>
+  </footer>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    // Sticky Header Scroll Effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Custom Cursor
+    const cursor = document.querySelector('.cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.top = e.clientY + 'px';
+      cursor.style.left = e.clientX + 'px';
+    });
+
+    // Scroll-triggered Fade-ins (IntersectionObserver)
+    const faders = document.querySelectorAll('.fade-in');
+    const opts = { threshold: 0.1, rootMargin: "0px 0px -100px 0px" };
+    const appearOnScroll = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, opts);
+    faders.forEach(el => appearOnScroll.observe(el));
+
+    // Gold Particles (Hero Only)
+    const canvas = document.getElementById('particles');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let w, h, particles = [];
+      function initParticles() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        particles = [];
+        for (let i = 0; i < 80; i++) {
+          particles.push({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            r: Math.random() * 2 + 0.5,
+            dy: Math.random() * 0.5 + 0.1
+          });
+        }
+      }
+      function animateParticles() {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(212,175,55,${p.r / 3})`;
+          ctx.fill();
+          p.y += p.dy;
+          if (p.y > h) p.y = 0;
+        });
+        requestAnimationFrame(animateParticles);
+      }
+      window.addEventListener('resize', initParticles);
+      initParticles();
+      animateParticles();
+    }
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        item.classList.toggle('active');
+        const answer = item.querySelector('.faq-answer');
+        const icon = q.querySelector('span:last-child');
+        icon.textContent = item.classList.contains('active') ? '−' : '+';
+      });
+    });
+
+    // Smooth Scroll for Nav Links
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // Lazy Load Images
+    if ('loading' in HTMLImageElement.prototype) {
+      document.querySelectorAll('img[loading="lazy"]').forEach(img => img.loading = 'lazy');
+    }
+  </script>
+
+</body>
+</html>
